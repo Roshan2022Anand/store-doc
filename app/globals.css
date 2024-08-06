@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: black;
+  color: black;
+  cursor: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+
+::selection {
+  color: orange;
+}
+
+.mouseCircle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid orange;
+  box-shadow: 0px 0px 10px 1px orange;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+.formContainer{
+  background-color: white;
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 10px;
+}
+
+#addBtn:hover,
+.card:hover {
+  border: 2px solid orange;
+  /* color: orange; */
+  box-shadow: 0px 0px 10px 1px orange;
+}
+
+.ball {
+  background-color: orange;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+
+}
+
+.card {
+  width: 200px;
+  height: 250px;
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  border: 1px solid rgb(137, 137, 137);
+  border-radius: 40px;
+  position: absolute;
+  cursor: pointer;
+}
+.cardInfo{
+  text-shadow: 1.2px 1.2px rgb(143, 145, 151);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+}
+.deleteBtnHolder{
+  text-align: right;
+  padding-right: 10px;
+}
+.deleteBtnHolder>button{
+  text-shadow: 3px 1px black;
+  color: rgb(223, 206, 206);
+  font-size: 25px;
+  transition: transform 1s;
+}
+.deleteBtnHolder>button:hover{
+  transform: scale(1.5) rotate(360deg);
+  color: rgb(255, 0, 0);
+  text-shadow: none;
+}
+
+form {
+  width:99%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  padding: 5px;
+  gap: 5px;
+  border-radius: 10px;
+
+}
+form>*{
+  border: 2px solid black;
+  color: black;
+  font-weight: bolder;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 5px;
+  width: 100%;
+}
+form>button{
+  width: fit-content;
+}
+form>*:focus{
+  outline: none;
+}
+.createBtn:hover,form>button:hover{
+  color: rgb(255, 255, 255);
+  border: 1px solid rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0);
+}
+
