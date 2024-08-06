@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 const page = () => {
-  
+
   //all the states are declared here
   const [cardCount, setcardCount] = useState(0);
   const [cardComponentArr, setcardComponentArr] = useState([]);
@@ -41,48 +41,65 @@ const page = () => {
   const openCloseForm = () => {
     if (formContainerState) {
       gsap.to(".formContainer", {
-        width: 50,
-        height: 40,
+        width: 'fit-content',
+        height: 'fit-content',
+        border: 'none',
+        duration: 0.5
+      })
+      
+      gsap.to("#addBtn", {
+        borderRadius:'10px',
+        width:40,
+        rotate:-360,
         duration: 0.5
       })
     } else {
       gsap.to(".formContainer", {
+        borderLeft: '1px solid white',
+        borderBottom: '1px solid white',
         width: 250,
-        height: 200,
+        height: 250
+      })
+      gsap.to("#addBtn", {
+        width:35,
+        height:35,
+        borderRadius:'50%',
+        rotate: 360,
         duration: 0.5
       })
+
     }
     setformForCard(!formForCard);
     setformContainerState(!formContainerState);
   }
 
   // funtion to delete the exciting card
-  const deleteCard=(index)=>{
-    console.log("working");    
-    let newCardComponentArr=cardComponentArr;
-    newCardComponentArr.slice(index,1);
+  const deleteCard = (index) => {
+    console.log("working");
+    let newCardComponentArr = cardComponentArr;
+    newCardComponentArr.slice(index, 1);
     setcardComponentArr(newCardComponentArr);
   }
 
   //funtion to create a new card whenever clicked
   const creatCard = () => {
-    setcardComponentArr([...cardComponentArr, <Card cardCount={cardCount} mainContainer={mainContainer} title={titleValue} desc={descValue} deleteCard={deleteCard}/>])
+    setcardComponentArr([...cardComponentArr, <Card cardCount={cardCount} mainContainer={mainContainer} title={titleValue} desc={descValue} deleteCard={deleteCard} />])
     openCloseForm();
     setcardCount(cardCount + 1);
   }
 
 
   // funtion to not let the user to create the card
-  const dontCreate=()=>{
-    gsap.fromTo(".shake",{
-      x:-5,
-      border:'2px solid red'
-    },{
-      x:5,
-      yoyo:true,
-      repeat:6,
-      duration:0.09,
-      ease: "power1.inOut", 
+  const dontCreate = () => {
+    gsap.fromTo(".shake", {
+      x: -5,
+      border: '2px solid red'
+    }, {
+      x: 5,
+      yoyo: true,
+      repeat: 6,
+      duration: 0.09,
+      ease: "power1.inOut",
     })
   }
 
@@ -112,22 +129,23 @@ const page = () => {
 
         {/* container which holds the button and form for creating a card */}
         <div className='formContainer flex flex-col items-end z-50' >
-          <button className='border-black text-black border-2 rounded-lg w-[40px] font-bold z-50 m-1' onClick={openCloseForm} id='addBtn'>
+          <button className='border-zinc-500 text-zinc-500 border-2 rounded-lg w-[40px] font-bold z-50 m-1' onClick={openCloseForm} id='addBtn'>
             {(formContainerState) ? '-' : '+'}</button>
           {/* form for creating a card */}
           {(formForCard) ? <form className='form' onSubmit={(e) => {
             e.preventDefault();
-            if(titleValue!="" && descValue!=""){
+            if (titleValue != "" && descValue != "") {
               creatCard();
               settitleValue("");
               setdescValue("");
-            }else{dontCreate();}
+            } else { dontCreate(); }
           }}>
             <input className='shake' type='text' placeholder='Title' value={titleValue} onChange={(e) => { settitleValue(e.target.value) }} />
-            <textarea className='shake' cols={5} placeholder='Description' value={descValue}
+            <textarea className='shake' cols={5} rows={10}
+              placeholder='Description' value={descValue}
               onChange={(e) => { setdescValue(e.target.value) }} />
             <button className='font-bold'>Attach file +</button>
-            <input type='submit' value='Create' className='createBtn'/>
+            <input type='submit' value='Create' className='createBtn' />
           </form>
             : <></>}
         </div>
