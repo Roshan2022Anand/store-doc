@@ -6,6 +6,8 @@ import { useGSAP } from '@gsap/react';
 
 const page = () => {
 
+
+
   //all the states are declared here
   const [cardCount, setcardCount] = useState(0);
   const [cardComponentArr, setcardComponentArr] = useState([]);
@@ -35,6 +37,16 @@ const page = () => {
       window.removeEventListener("mousemove", handleMouseMove);
     }
 
+  })
+
+
+  // all the save cards are shown when the website is mounted
+  useEffect(() => {
+    let cardProps = JSON.parse(localStorage.getItem('card-props'));
+    if (cardProps) {
+      setcardComponentArr([...cardComponentArr, ...cardProps])
+    }
+
   }, [])
 
   //funtion to open or close form
@@ -44,13 +56,14 @@ const page = () => {
         width: 'fit-content',
         height: 'fit-content',
         border: 'none',
+        backgroundColor: 'transparent',
         duration: 0.5
       })
-      
+
       gsap.to("#addBtn", {
-        borderRadius:'10px',
-        width:40,
-        rotate:-360,
+        borderRadius: '10px',
+        width: 40,
+        rotate: -360,
         duration: 0.5
       })
     } else {
@@ -58,12 +71,13 @@ const page = () => {
         borderLeft: '1px solid white',
         borderBottom: '1px solid white',
         width: 250,
-        height: 250
+        height: 250,
+        backgroundColor: 'black',
       })
       gsap.to("#addBtn", {
-        width:35,
-        height:35,
-        borderRadius:'50%',
+        width: 35,
+        height: 35,
+        borderRadius: '50%',
         rotate: 360,
         duration: 0.5
       })
@@ -75,15 +89,23 @@ const page = () => {
 
   // funtion to delete the exciting card
   const deleteCard = (index) => {
-    console.log("working");
     let newCardComponentArr = cardComponentArr;
-    newCardComponentArr.slice(index, 1);
-    setcardComponentArr(newCardComponentArr);
+    newCardComponentArr.splice(index, 1);
+    setcardComponentArr([...newCardComponentArr]);
+    localStorage.setItem('card-props', JSON.stringify([...newCardComponentArr]))
   }
-
+  // localStorage.clear();
   //funtion to create a new card whenever clicked
   const creatCard = () => {
-    setcardComponentArr([...cardComponentArr, <Card cardCount={cardCount} mainContainer={mainContainer} title={titleValue} desc={descValue} deleteCard={deleteCard} />])
+    let cardInfoObj = {
+      "cardcount": cardCount,
+      "title": titleValue,
+      "description": descValue
+    }
+
+    // localStorage.setItem('count',cardCount);
+    setcardComponentArr([...cardComponentArr, cardInfoObj]);
+    localStorage.setItem('card-props', JSON.stringify([...cardComponentArr, cardInfoObj]))
     openCloseForm();
     setcardCount(cardCount + 1);
   }
@@ -134,18 +156,19 @@ const page = () => {
           {/* form for creating a card */}
           {(formForCard) ? <form className='form' onSubmit={(e) => {
             e.preventDefault();
-            if (titleValue != "" && descValue != "") {
-              creatCard();
-              settitleValue("");
-              setdescValue("");
-            } else { dontCreate(); }
           }}>
             <input className='shake' type='text' placeholder='Title' value={titleValue} onChange={(e) => { settitleValue(e.target.value) }} />
             <textarea className='shake' cols={5} rows={10}
               placeholder='Description' value={descValue}
               onChange={(e) => { setdescValue(e.target.value) }} />
             <button className='font-bold'>Attach file +</button>
-            <input type='submit' value='Create' className='createBtn' />
+            <input type='submit' value='Create' className='createBtn' onClick={() => {
+              if (titleValue != "" && descValue != "") {
+                creatCard();
+                settitleValue("");
+                setdescValue("");
+              } else { dontCreate(); }
+            }} />
           </form>
             : <></>}
         </div>
@@ -161,7 +184,7 @@ const page = () => {
         {/* div container which will contain all the cards */}
         <div ref={allCardContainer} className=''>
           {cardComponentArr.map((ele) => {
-            return ele
+            return <Card cardCount={ele['cardcount']} mainContainer={mainContainer} title={ele.title} desc={ele.description} deleteCard={deleteCard} />
           })}
         </div>
 
